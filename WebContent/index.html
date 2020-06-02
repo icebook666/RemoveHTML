@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Remove HTML tags from a String</title>
+<script src="./jscript/jquery.min.js"></script>
+<script src="./jscript/bootstrap.min.js"></script>
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+<script>
+	$(document).ready(function() {
+		$('#html_text').val("");
+		$('#convert_text').val("");
+		
+		$("#removeHTMLRegex").click(function() {
+			var html_text = $('#html_text').val();
+			$.ajax({
+				type : "post",
+				url : 'jsp/remove_html_text.jsp',
+				data : {
+					method: 'Regex',
+					html_text: html_text
+				},
+				dataType : "json",
+				beforeSend:function(XMLHttpRequest){
+					$('#convert_text').val("正規表示法轉換中...");
+		        },
+				success : function(data, textStatus) {
+					$('#convert_text').val(data['result']);
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+				},
+				complete:function(data, status){
+				}
+			});
+		});
+		
+		$("#removeHTMLJsoup").click(function() {
+			var html_text = $('#html_text').val();
+			$.ajax({
+				type : "post",
+				url : 'jsp/remove_html_text.jsp',
+				data : {
+					method: 'Jsoup',
+					html_text: html_text
+				},
+				dataType : "json",
+				beforeSend:function(XMLHttpRequest){
+					$('#convert_text').val("Jsoup轉換中...");
+		        },
+				success : function(data, textStatus) {
+					$('#convert_text').val(data['result']);
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+				},
+				complete:function(data, status){
+				}
+			});
+		});
+		
+		$("#clearField").click(function() {
+			$('#html_text').val("");
+			$('#convert_text').val("");
+		});
+	});
+</script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12">
+			<form>
+			  <div class="form-group">
+			    <label for="exampleFormControlTextarea1">輸入含有HTML的字串:</label>
+			    <textarea class="form-control" id="html_text" rows="10"></textarea>
+			  </div>
+			  <table>
+					<tr>
+						<td width="100%">
+							<div class="btn-group btn-group-md" role="group">
+								<button class="btn btn-large btn-outline-success" type="button" style="padding: 12px 30px;" id="removeHTMLRegex">用正規表示法進行轉換</button>
+								<button class="btn btn-large btn-outline-success" type="button" style="padding: 12px 30px;" id="removeHTMLJsoup">用Jsoup進行轉換</button>
+								<button class="btn btn-large btn-outline-secondary" type="button" style="padding: 12px 30px;" id="clearField">清除資料</button>
+							</div>
+						</td>
+					</tr>
+			  </table>
+			  <div class="form-group">
+			    <label for="exampleFormControlTextarea2">轉換後去除HTML的字串:</label>
+			    <textarea class="form-control" id="convert_text" rows="10"></textarea>
+			  </div>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>
